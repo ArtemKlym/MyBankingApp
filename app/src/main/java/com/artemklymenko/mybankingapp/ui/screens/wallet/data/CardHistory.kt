@@ -1,4 +1,4 @@
-package com.artemklymenko.mybankingapp.data
+package com.artemklymenko.mybankingapp.ui.screens.wallet.data
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
