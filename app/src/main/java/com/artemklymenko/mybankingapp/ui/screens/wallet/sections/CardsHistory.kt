@@ -31,7 +31,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.artemklymenko.mybankingapp.data.CardHistory
+import com.artemklymenko.mybankingapp.ui.screens.wallet.data.CardHistory
 import com.artemklymenko.mybankingapp.ui.theme.GreenStart
 import kotlin.math.abs
 

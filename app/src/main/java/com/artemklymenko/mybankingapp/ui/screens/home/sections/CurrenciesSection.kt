@@ -42,7 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.artemklymenko.mybankingapp.data.Currency
+import com.artemklymenko.mybankingapp.ui.screens.home.data.Currency
 import com.artemklymenko.mybankingapp.ui.theme.GreenStart
 
 val currencies = listOf(
