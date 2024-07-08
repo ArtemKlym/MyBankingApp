@@ -23,9 +23,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.artemklymenko.mybankingapp.ui.screens.home.data.Finance
 import com.artemklymenko.mybankingapp.ui.theme.BlueStart
 import com.artemklymenko.mybankingapp.ui.theme.GreenStart
@@ -55,9 +55,8 @@ val financeList = listOf(
     )
 )
 
-@Preview
 @Composable
-fun FinanceSection() {
+fun FinanceSection(navController: NavHostController) {
     Column {
         Text(
             text = "Finance",
@@ -68,14 +67,14 @@ fun FinanceSection() {
         )
         LazyRow {
             items(financeList.size) { index ->
-                FinanceItem(index)
+                FinanceItem(navController, index)
             }
         }
     }
 }
 
 @Composable
-fun FinanceItem(index: Int) {
+fun FinanceItem(navController: NavHostController, index: Int) {
     val finance = financeList[index]
 
     var lastItemPaddingEnd = 0.dp
@@ -91,7 +90,14 @@ fun FinanceItem(index: Int) {
                 .background(MaterialTheme.colorScheme.secondaryContainer)
                 .size(120.dp)
                 .padding(16.dp)
-                .clickable { },
+                .clickable {
+                          when(index){
+                              0 -> navController.navigate("mobileTopUp")
+                              1 -> navController.navigate("charityScreen")
+                              2 -> navController.navigate("financeAnalyticsScreen")
+                              3 -> navController.navigate("myTransactions")
+                          }
+                },
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Box(
