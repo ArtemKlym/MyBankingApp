@@ -29,9 +29,9 @@ import com.artemklymenko.mybankingapp.ui.screens.analytics.FinanceAnalyticsScree
 import com.artemklymenko.mybankingapp.ui.screens.charity.CharityScreen
 import com.artemklymenko.mybankingapp.ui.screens.home.HomeScreen
 import com.artemklymenko.mybankingapp.ui.screens.notifications.NotificationScreen
-import com.artemklymenko.mybankingapp.ui.screens.phone.MobileTopUp
+import com.artemklymenko.mybankingapp.ui.screens.phone.MobileTopUpScreen
 import com.artemklymenko.mybankingapp.ui.screens.profile.ProfileScreen
-import com.artemklymenko.mybankingapp.ui.screens.transactions.MyTransactions
+import com.artemklymenko.mybankingapp.ui.screens.transactions.MyTransactionsScreen
 import com.artemklymenko.mybankingapp.ui.screens.wallet.WalletScreen
 
 
@@ -71,10 +71,10 @@ fun BottomNavigationBar(
                     CharityScreen()
                 }
                 composable("mobileTopUp") {
-                    MobileTopUp()
+                    MobileTopUpScreen()
                 }
                 composable("myTransactions") {
-                    MyTransactions()
+                    MyTransactionsScreen()
                 }
             }
         }
