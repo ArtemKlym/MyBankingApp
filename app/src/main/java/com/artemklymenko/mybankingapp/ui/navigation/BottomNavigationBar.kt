@@ -25,9 +25,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.artemklymenko.mybankingapp.data.BottomNavigation
+import com.artemklymenko.mybankingapp.ui.screens.analytics.FinanceAnalyticsScreen
+import com.artemklymenko.mybankingapp.ui.screens.charity.CharityScreen
 import com.artemklymenko.mybankingapp.ui.screens.home.HomeScreen
 import com.artemklymenko.mybankingapp.ui.screens.notifications.NotificationScreen
+import com.artemklymenko.mybankingapp.ui.screens.phone.MobileTopUpScreen
 import com.artemklymenko.mybankingapp.ui.screens.profile.ProfileScreen
+import com.artemklymenko.mybankingapp.ui.screens.transactions.MyTransactionsScreen
 import com.artemklymenko.mybankingapp.ui.screens.wallet.WalletScreen
 
 
@@ -47,7 +51,7 @@ fun BottomNavigationBar(
         ) {
             NavHost(navController = navController, startDestination = items[0].title) {
                 composable(items[0].title) {
-                    HomeScreen()
+                    HomeScreen(navController)
                 }
                 composable(items[1].title) {
                     WalletScreen()
@@ -59,6 +63,18 @@ fun BottomNavigationBar(
                 composable(items[3].title) {
                     ProfileScreen()
                     showProfileBadge = false
+                }
+                composable("financeAnalyticsScreen") {
+                    FinanceAnalyticsScreen()
+                }
+                composable("charityScreen") {
+                    CharityScreen()
+                }
+                composable("mobileTopUp") {
+                    MobileTopUpScreen()
+                }
+                composable("myTransactions") {
+                    MyTransactionsScreen()
                 }
             }
         }
