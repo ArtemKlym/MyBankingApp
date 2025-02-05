@@ -15,69 +15,53 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AttachMoney
-import androidx.compose.material.icons.rounded.CurrencyPound
-import androidx.compose.material.icons.rounded.CurrencyYen
 import androidx.compose.material.icons.rounded.Euro
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.artemklymenko.mybankingapp.ui.screens.home.data.Currency
+import com.artemklymenko.mybankingapp.ui.screens.home.data.toFloatWithTwoDecimals
 import com.artemklymenko.mybankingapp.ui.theme.GreenStart
+import com.artemklymenko.mybankingapp.ui.theme.MyBankingAppTheme
 
-val currencies = listOf(
-    Currency(
-        name = "USD",
-        buy = 40.80f,
-        sell = 40.90f,
-        icon = Icons.Rounded.AttachMoney
-    ),
-    Currency(
-        name = "EUR",
-        buy = 43.50f,
-        sell = 44.07f,
-        icon = Icons.Rounded.Euro
-    ),
-    Currency(
-        name = "YEN",
-        buy = 0.22f,
-        sell = 0.25f,
-        icon = Icons.Rounded.CurrencyYen
-    ),
-    Currency(
-        name = "GBP",
-        buy = 50.75f,
-        sell = 52.00f,
-        icon = Icons.Rounded.CurrencyPound
-    ),
-)
 
-@Preview
 @Composable
-fun CurrenciesSection() {
+fun CurrenciesSection(
+    currenciesInDepartments: List<Currency>,
+    currenciesInCards: List<Currency>,
+) {
     var isVisible by remember { mutableStateOf(false) }
 
     var iconState by remember { mutableStateOf(Icons.Rounded.KeyboardArrowUp) }
+
+    var tabIndex by remember { mutableIntStateOf(0) }
+
+    val tabs = listOf("Departments", "Cards")
 
     Box(
         modifier = Modifier
@@ -136,7 +120,8 @@ fun CurrenciesSection() {
                 BoxWithConstraints(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = 8.dp)
+                        .padding(top = 8.dp)
                         .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                         .background(MaterialTheme.colorScheme.background)
                 ) {
@@ -148,6 +133,18 @@ fun CurrenciesSection() {
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
                     ) {
+                        TabRow(
+                            selectedTabIndex = tabIndex,
+                            modifier = Modifier
+                                .padding(bottom = 8.dp)
+                        ) {
+                            tabs.forEachIndexed { index, title ->
+                                Tab(text = { Text(title) },
+                                    selected = tabIndex == index,
+                                    onClick = { tabIndex = index }
+                                )
+                            }
+                        }
                         Spacer(
                             modifier = Modifier.height(16.dp)
                         )
@@ -173,7 +170,7 @@ fun CurrenciesSection() {
 
                             Text(
                                 modifier = Modifier.width(width),
-                                text = "Sell",
+                                text = "Sale",
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 16.sp,
                                 color = MaterialTheme.colorScheme.onBackground,
@@ -182,11 +179,19 @@ fun CurrenciesSection() {
                         }
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        LazyColumn {
-                            items(currencies.size) { index ->
-                                CurrencyItem(index, width)
+                        when (tabIndex) {
+                            0 -> LazyColumn {
+                                items(currenciesInDepartments) { currency ->
+                                    CurrencyItemInDepartments(currency, width)
+                                }
+                            }
+                            1 -> LazyColumn {
+                                items(currenciesInCards) { currency ->
+                                    CurrencyItemInCards(currency, width)
+                                }
                             }
                         }
+
                     }
                 }
             }
@@ -195,9 +200,7 @@ fun CurrenciesSection() {
 }
 
 @Composable
-fun CurrencyItem(index: Int, width: Dp) {
-    val currency = currencies[index]
-
+private fun CurrencyItemInCards(currency: Currency, width: Dp) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -217,15 +220,19 @@ fun CurrencyItem(index: Int, width: Dp) {
             ) {
                 Icon(
                     modifier = Modifier.size(16.dp),
-                    imageVector = currency.icon,
-                    contentDescription = currency.name,
+                    imageVector = if (currency.ccy == "EUR") {
+                        Icons.Rounded.Euro
+                    } else {
+                        Icons.Rounded.AttachMoney
+                    },
+                    contentDescription = currency.ccy,
                     tint = Color.White
                 )
             }
 
             Text(
                 modifier = Modifier.padding(start = 8.dp),
-                text = currency.name,
+                text = currency.ccy,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground,
@@ -234,7 +241,7 @@ fun CurrencyItem(index: Int, width: Dp) {
 
         Text(
             modifier = Modifier.width(width),
-            text = "₴ ${currency.buy}",
+            text = "₴ ${currency.buy.toFloatWithTwoDecimals()}",
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onBackground,
@@ -243,11 +250,79 @@ fun CurrencyItem(index: Int, width: Dp) {
 
         Text(
             modifier = Modifier.width(width),
-            text = "₴ ${currency.sell}",
+            text = "₴ ${currency.sale.toFloatWithTwoDecimals()}",
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.End
         )
+    }
+}
+
+@Composable
+private fun CurrencyItemInDepartments(currency: Currency, width: Dp) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            modifier = Modifier.width(width),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(GreenStart)
+                    .padding(4.dp)
+            ) {
+                Icon(
+                    modifier = Modifier.size(16.dp),
+                    imageVector = if (currency.ccy == "EUR") {
+                        Icons.Rounded.Euro
+                    } else {
+                        Icons.Rounded.AttachMoney
+                    },
+                    contentDescription = currency.ccy,
+                    tint = Color.White
+                )
+            }
+
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                text = currency.ccy,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+        }
+
+        Text(
+            modifier = Modifier.width(width),
+            text = "₴ ${currency.buy.toFloatWithTwoDecimals()}",
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.End
+        )
+
+        Text(
+            modifier = Modifier.width(width),
+            text = "₴ ${currency.sale.toFloatWithTwoDecimals()}",
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.End
+        )
+    }
+}
+
+@PreviewLightDark
+@Composable
+fun CurrenciesSectionPreview(modifier: Modifier = Modifier) {
+    MyBankingAppTheme {
+        CurrenciesSection(emptyList(), emptyList())
     }
 }

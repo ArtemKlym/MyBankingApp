@@ -13,6 +13,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,6 +30,7 @@ import com.artemklymenko.mybankingapp.data.BottomNavigation
 import com.artemklymenko.mybankingapp.ui.screens.analytics.FinanceAnalyticsScreen
 import com.artemklymenko.mybankingapp.ui.screens.charity.CharityScreen
 import com.artemklymenko.mybankingapp.ui.screens.home.HomeScreen
+import com.artemklymenko.mybankingapp.ui.screens.home.HomeViewModel
 import com.artemklymenko.mybankingapp.ui.screens.notifications.NotificationScreen
 import com.artemklymenko.mybankingapp.ui.screens.phone.MobileTopUpScreen
 import com.artemklymenko.mybankingapp.ui.screens.profile.ProfileScreen
@@ -51,7 +54,13 @@ fun BottomNavigationBar(
         ) {
             NavHost(navController = navController, startDestination = items[0].title) {
                 composable(items[0].title) {
-                    HomeScreen(navController)
+                    val viewModel: HomeViewModel = viewModel()
+                    val state by viewModel.state.collectAsState()
+                    HomeScreen(
+                        navController = navController,
+                        state = state,
+                        onEvent = viewModel::onEvent
+                    )
                 }
                 composable(items[1].title) {
                     WalletScreen()

@@ -1,10 +1,16 @@
 package com.artemklymenko.mybankingapp.ui.screens.home.data
 
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.google.gson.annotations.SerializedName
+import java.math.RoundingMode
 
 data class Currency(
-    val name: String,
-    val buy: Float,
-    val sell: Float,
-    val icon: ImageVector
+    val ccy: String,
+    @SerializedName("base_ccy")
+    val baseCcy: String,
+    val buy: String,
+    val sale: String
 )
+
+fun String.toFloatWithTwoDecimals(): Float {
+    return this.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toFloat()
+}
