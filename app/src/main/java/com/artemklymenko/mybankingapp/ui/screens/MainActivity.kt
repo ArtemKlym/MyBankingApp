@@ -1,6 +1,7 @@
 package com.artemklymenko.mybankingapp.ui.screens
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,7 +33,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     val bottomBarItems = listOf(BottomNavigation.Home, BottomNavigation.Wallet, BottomNavigation.Notifications, BottomNavigation.Profile)
-                    BottomNavigationBar(navController, bottomBarItems)
+                    BottomNavigationBar(navController, bottomBarItems) {
+                        startActivity(Intent(this, ExchangeRateActivity::class.java))
+                    }
                 }
             }
         }

@@ -1,6 +1,5 @@
 package com.artemklymenko.mybankingapp.core.network
 
-import com.artemklymenko.mybankingapp.core.network.home.BankApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.SendToMobile
 import androidx.compose.material.icons.rounded.Analytics
+import androidx.compose.material.icons.rounded.AutoGraph
 import androidx.compose.material.icons.rounded.MonetizationOn
 import androidx.compose.material.icons.rounded.Money
 import androidx.compose.material3.Icon
@@ -51,6 +52,11 @@ val financeList = listOf(
     Finance(
         icon = Icons.Rounded.MonetizationOn,
         name = "My\nTransactions",
+        backgroundIconContainer = GreenStart
+    ),
+    Finance(
+        icon = Icons.Rounded.AutoGraph,
+        name = "Exchange Rates",
         backgroundIconContainer = GreenStart
     )
 )
@@ -96,6 +102,7 @@ fun FinanceItem(navController: NavHostController, index: Int) {
                               1 -> navController.navigate("charityScreen")
                               2 -> navController.navigate("financeAnalyticsScreen")
                               3 -> navController.navigate("myTransactions")
+                              4 -> navController.navigate("exchangeRates")
                           }
                 },
             verticalArrangement = Arrangement.SpaceBetween

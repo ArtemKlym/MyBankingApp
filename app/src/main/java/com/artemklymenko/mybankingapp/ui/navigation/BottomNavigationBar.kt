@@ -38,11 +38,12 @@ import com.artemklymenko.mybankingapp.ui.screens.transactions.MyTransactionsScre
 import com.artemklymenko.mybankingapp.ui.screens.wallet.WalletScreen
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController,
-    items: List<BottomNavigation>
+    items: List<BottomNavigation>,
+    onExchangeRatesClick: () -> Unit
 ) {
     var showNotificationBadge by remember { mutableStateOf(items[2].hasNews) }
     var showProfileBadge by remember { mutableStateOf(items[2].hasNews) }
@@ -84,6 +85,9 @@ fun BottomNavigationBar(
                 }
                 composable("myTransactions") {
                     MyTransactionsScreen()
+                }
+                composable("exchangeRates") {
+                    onExchangeRatesClick.invoke()
                 }
             }
         }
